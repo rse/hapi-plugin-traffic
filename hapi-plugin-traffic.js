@@ -30,6 +30,8 @@ var register = function (server, options, next) {
     /*  helper function for accounting the traffic on a socket  */
     var traffic = {}
     var trafficOnSocket = (id, socket, field) => {
+        if (socket === null)
+            return 0
         var idL = `${id}:${socket._handle.fd}` /* ATTENTION: internal inspection!  */
         var idR = `${socket.remoteFamily}:${socket.remoteAddress}:${socket.remotePort}`
         if (   traffic[idL] === undefined
@@ -77,9 +79,10 @@ var register = function (server, options, next) {
         var req = request.raw.req
         request.plugins.traffic.recvRaw +=
             `${req.method} ${req.url} HTTP/${req.httpVersion}\r\n`.length
-        for (var i = 0; i < request.raw.req.rawHeaders.length; i += 2)
-            request.plugins.traffic.recvRaw +=
-                `${req.rawHeaders[i]}: ${req.rawHeaders[i+1]}\r\n`.length
+        if (request.raw.req.rawHeaders instanceof Array)
+            for (var i = 0; i < request.raw.req.rawHeaders.length; i += 2)
+                request.plugins.traffic.recvRaw +=
+                    `${req.rawHeaders[i]}: ${req.rawHeaders[i+1]}\r\n`.length
         request.plugins.traffic.recvRaw += "\r\n".length
 
         /*  count the raw and payload received traffic  */
