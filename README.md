@@ -26,10 +26,12 @@ payload/raw data plus the start/finish time and duration).
 
 ATTENTION: The information about the network traffic is not 100%
 precise, as this plugin has has to partially estimate the numbers
-`recvRaw` (because HAPI comes too late) and `sentPayload` (in case of
-Boom error responses). Hence, the information is precise enough for the
-usual logging purposes, but do not use at least the partially estimated
-numbers `recvRaw` and `sentPayload` for realistic accounting purposes.
+`recvRaw` (because HAPI comes too late and hence the HTTP headers have
+to be re-constructed) and `sentPayload` (because in case of Boom error
+responses the JSON serialization has to be pre-constructed). Hence, the
+information is precise enough for the usual logging purposes, but do not
+use at least the partially estimated numbers `recvRaw` and `sentPayload`
+for realistic accounting purposes.
 
 Usage
 -----
