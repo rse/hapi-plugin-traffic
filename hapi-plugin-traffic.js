@@ -30,7 +30,7 @@ var register = function (server, options, next) {
     /*  helper function for accounting the traffic on a socket  */
     var traffic = {}
     var trafficOnSocket = (id, socket, field) => {
-        var idL = `${id}:${socket._handle.fd}`
+        var idL = `${id}:${socket._handle.fd}` /* ATTENTION: internal inspection!  */
         var idR = `${socket.remoteFamily}:${socket.remoteAddress}:${socket.remotePort}`
         if (   traffic[idL] === undefined
             || (typeof traffic[idL] === "object" && traffic[idL].idR !== idR)) {
@@ -43,7 +43,7 @@ var register = function (server, options, next) {
 
     /*  decorate the request object  */
     server.decorate("request", "traffic", (request) => {
-        /*  cruel duck punching hack to get the raw sent traffic at the right time  */
+        /*  ATTENTION: duck punching the API to get the raw sent traffic at the right time  */
         request.raw.res.end = ((end) => {
             return function () {
                 request.plugins.traffic.sentRaw = trafficOnSocket("res", request.raw.res.socket, "bytesWritten")
@@ -71,7 +71,7 @@ var register = function (server, options, next) {
             sentRaw:      0
         }
 
-        /*  count the raw received traffic the cruel way, because
+        /*  ATTENTION: count the raw received traffic the cruel way, because
             request.raw.req.socket.bytesRead is always 0 (HAPI comes too late,
             the data is already read from the socket and hence has to be estimated)  */
         var req = request.raw.req
