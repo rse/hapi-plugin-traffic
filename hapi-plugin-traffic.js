@@ -33,7 +33,7 @@ var register = function (server, options, next) {
         if (socket === null)
             return 0
         var fd = "unknown"
-        if (typeof socket._handle === "object" && socket._handle.fd >= 0)
+        if (typeof socket._handle === "object" && socket._handle !== null && socket._handle.fd >= 0)
             fd = socket._handle.fd  /*  ATTENTION: internal inspection!  */
         var idL = `${id}:${fd}`
         var idR = `${socket.remoteFamily}:${socket.remoteAddress}:${socket.remotePort}`
