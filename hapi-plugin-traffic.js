@@ -32,7 +32,10 @@ var register = function (server, options, next) {
     var trafficOnSocket = (id, socket, field) => {
         if (socket === null)
             return 0
-        var idL = `${id}:${socket._handle.fd}` /* ATTENTION: internal inspection!  */
+        var fd = "unknown"
+        if (typeof socket._handle === "object" && socket._handle.fd >= 0)
+            fd = socket._handle.fd  /*  ATTENTION: internal inspection!  */
+        var idL = `${id}:${fd}`
         var idR = `${socket.remoteFamily}:${socket.remoteAddress}:${socket.remotePort}`
         if (   traffic[idL] === undefined
             || (typeof traffic[idL] === "object" && traffic[idL].idR !== idR)) {
