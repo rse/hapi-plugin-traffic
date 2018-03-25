@@ -85,7 +85,7 @@ const register = async (server, options, next) => {
         if (request.raw.req.rawHeaders instanceof Array)
             for (var i = 0; i < request.raw.req.rawHeaders.length; i += 2)
                 request.plugins.traffic.recvRaw +=
-                    `${req.rawHeaders[i]}: ${req.rawHeaders[i+1]}\r\n`.length
+                    `${req.rawHeaders[i]}: ${req.rawHeaders[i + 1]}\r\n`.length
         request.plugins.traffic.recvRaw += "\r\n".length
 
         /*  count the raw and payload received traffic  */
