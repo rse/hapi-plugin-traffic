@@ -23,10 +23,10 @@
 */
 
 /*  internal dependencies  */
-var Package = require("./package.json")
+const pkg = require("./package.json")
 
 /*  the HAPI plugin register function  */
-var register = function (server, options, next) {
+const register = async (server, options, next) => {
     /*  helper function for accounting the traffic on a socket  */
     var traffic = {}
     var trafficOnSocket = (id, socket, field) => {
@@ -41,8 +41,8 @@ var register = function (server, options, next) {
             || (typeof traffic[idL] === "object" && traffic[idL].idR !== idR)) {
             traffic[idL] = { idR: idR, bytes: 0 }
         }
-        var bytes = socket[field] - traffic[idL].bytes
-        traffic[idL].bytes = socket[field]
+        var bytes = (socket[field] || 0) - traffic[idL].bytes
+        traffic[idL].bytes = (socket[field] || 0)
         return bytes
     }
 
@@ -63,7 +63,7 @@ var register = function (server, options, next) {
     }, { apply: true })
 
     /*  hook into the start of request processing  */
-    server.ext("onRequest", (request, reply) => {
+    server.ext("onRequest", async (request, h) => {
         /*  initialize traffic information  */
         var now = new Date()
         request.plugins.traffic = {
@@ -89,16 +89,16 @@ var register = function (server, options, next) {
         request.plugins.traffic.recvRaw += "\r\n".length
 
         /*  count the raw and payload received traffic  */
-        request.on("peek", (chunk) => {
+        request.events.on("peek", (chunk) => {
             request.plugins.traffic.recvRaw     += chunk.length
             request.plugins.traffic.recvPayload += chunk.length
         })
 
-        return reply.continue()
+        return h.continue
     })
 
     /*  hook into the middle of processing  */
-    server.ext("onPreResponse", (request, reply) => {
+    server.ext("onPreResponse", async (request, h) => {
         /*  count the payload sent traffic  */
         if (request.response.isBoom) {
             /*  special case: Boom error object
@@ -108,28 +108,27 @@ var register = function (server, options, next) {
         }
         else {
             /*  regular case: the standard HAPI response object  */
-            request.response.on("peek", (chunk) => {
+            request.response.events.on("peek", (chunk) => {
                 request.plugins.traffic.sentPayload += chunk.length
             })
         }
-        return reply.continue()
+        return h.continue
     })
 
     /*  hook into the processing where lately, when the response was sent  */
-    server.on("response", (request) => {
+    server.events.on("response", async (request) => {
         request.plugins.traffic.timeFinish = new Date()
         request.plugins.traffic.timeDuration =
             request.plugins.traffic.timeFinish.getTime() -
             request.plugins.traffic.timeStart.getTime()
     })
-
-    /*  continue processing  */
-    next()
 }
 
-/*  provide meta-information as expected by HAPI  */
-register.attributes = { pkg: Package }
-
 /*  export register function, wrapped in a plugin object  */
-module.exports = { register: register }
+module.exports = {
+    plugin: {
+        register: register,
+        pkg:      pkg
+    }
+}
 

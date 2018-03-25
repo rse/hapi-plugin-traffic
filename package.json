@@ -16,9 +16,28 @@
     },
     "homepage": "https://github.com/rse/hapi-plugin-traffic",
     "bugs":     "https://github.com/rse/hapi-plugin-traffic/issues",
+    "peerDependencies": {
+        "hapi":                    ">=17.0.0"
+    },
     "dependencies": {
     },
+    "devDependencies": {
+        "hapi":                    "17.2.3",
+        "request":                 "2.85.0",
+        "request-promise":         "4.2.2",
+        "babel-eslint":            "8.2.2",
+        "eslint":                  "4.19.1",
+        "eslint-config-standard":  "11.0.0",
+        "eslint-plugin-standard":  "3.0.1",
+        "eslint-plugin-promise":   "3.7.0",
+        "eslint-plugin-import":    "2.9.0",
+        "eslint-plugin-node":      "6.0.1"
+    },
     "engines": {
-        "node":        ">=4.0.0"
+        "node":                    ">=8.0.0"
+    },
+    "scripts": {
+        "prepublishOnly":  "eslint --config eslint.yaml hapi-plugin-traffic.js",
+        "test":            "node test.js"
     }
 }
