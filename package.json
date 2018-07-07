@@ -25,7 +25,6 @@
         "hapi":                    "17.5.2",
         "request":                 "2.87.0",
         "request-promise":         "4.2.2",
-        "babel-eslint":            "8.2.5",
         "eslint":                  "5.0.1",
         "eslint-config-standard":  "11.0.0",
         "eslint-plugin-standard":  "3.1.0",
