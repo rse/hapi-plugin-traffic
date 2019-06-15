@@ -1,5 +1,5 @@
 
-const HAPI        = require("hapi")
+const HAPI        = require("@hapi/hapi")
 const HAPITraffic = require("./hapi-plugin-traffic")
 const Request     = require("request-promise")
 
