@@ -28,20 +28,20 @@ const pkg = require("./package.json")
 /*  the HAPI plugin register function  */
 const register = async (server, options, next) => {
     /*  helper function for accounting the traffic on a socket  */
-    var traffic = {}
-    var trafficOnSocket = (id, socket, field) => {
+    const traffic = {}
+    const trafficOnSocket = (id, socket, field) => {
         if (socket === null)
             return 0
-        var fd = "unknown"
+        let fd = "unknown"
         if (typeof socket._handle === "object" && socket._handle !== null && socket._handle.fd >= 0)
             fd = socket._handle.fd  /*  ATTENTION: internal inspection!  */
-        var idL = `${id}:${fd}`
-        var idR = `${socket.remoteFamily}:${socket.remoteAddress}:${socket.remotePort}`
+        const idL = `${id}:${fd}`
+        const idR = `${socket.remoteFamily}:${socket.remoteAddress}:${socket.remotePort}`
         if (   traffic[idL] === undefined
             || (typeof traffic[idL] === "object" && traffic[idL].idR !== idR)) {
             traffic[idL] = { idR: idR, bytes: 0 }
         }
-        var bytes = (socket[field] || 0) - traffic[idL].bytes
+        const bytes = (socket[field] || 0) - traffic[idL].bytes
         traffic[idL].bytes = (socket[field] || 0)
         return bytes
     }
@@ -65,7 +65,7 @@ const register = async (server, options, next) => {
     /*  hook into the start of request processing  */
     server.ext("onRequest", async (request, h) => {
         /*  initialize traffic information  */
-        var now = new Date()
+        const now = new Date()
         request.plugins.traffic = {
             timeStart:    now,
             timeFinish:   now,
@@ -79,11 +79,11 @@ const register = async (server, options, next) => {
         /*  ATTENTION: count the raw received traffic the cruel way, because
             request.raw.req.socket.bytesRead is always 0 (HAPI comes too late,
             the data is already read from the socket and hence has to be estimated)  */
-        var req = request.raw.req
+        const req = request.raw.req
         request.plugins.traffic.recvRaw +=
             `${req.method} ${req.url} HTTP/${req.httpVersion}\r\n`.length
         if (request.raw.req.rawHeaders instanceof Array)
-            for (var i = 0; i < request.raw.req.rawHeaders.length; i += 2)
+            for (let i = 0; i < request.raw.req.rawHeaders.length; i += 2)
                 request.plugins.traffic.recvRaw +=
                     `${req.rawHeaders[i]}: ${req.rawHeaders[i + 1]}\r\n`.length
         request.plugins.traffic.recvRaw += "\r\n".length
@@ -103,7 +103,7 @@ const register = async (server, options, next) => {
         if (request.response.isBoom) {
             /*  special case: Boom error object
                 (we can only estimate the serialization)  */
-            var json = JSON.stringify(request.response.output.payload)
+            const json = JSON.stringify(request.response.output.payload)
             request.plugins.traffic.sentPayload += json.length
         }
         else {
