@@ -22,15 +22,14 @@
     "dependencies": {
     },
     "devDependencies": {
-        "@hapi/hapi":              "18.4.0",
-        "request":                 "2.88.0",
-        "request-promise":         "4.2.5",
-        "eslint":                  "6.8.0",
-        "eslint-config-standard":  "14.1.0",
-        "eslint-plugin-standard":  "4.0.1",
+        "@hapi/hapi":              "20.0.3",
+        "request":                 "2.88.2",
+        "request-promise":         "4.2.6",
+        "eslint":                  "7.14.0",
+        "eslint-config-standard":  "16.0.2",
         "eslint-plugin-promise":   "4.2.1",
-        "eslint-plugin-import":    "2.19.1",
-        "eslint-plugin-node":      "10.0.0"
+        "eslint-plugin-import":    "2.22.1",
+        "eslint-plugin-node":      "11.1.0"
     },
     "engines": {
         "node":                    ">=8.0.0"
