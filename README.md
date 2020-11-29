@@ -39,7 +39,7 @@ Usage
 ```js
 await server.register(require("hapi-plugin-traffic"))
 [...]
-server.events.on("tail", (request) => {
+server.events.on("response", (request) => {
     let traffic = request.traffic()
     console.log(
         `recv=${traffic.recvPayload}/${traffic.recvRaw} ` +
