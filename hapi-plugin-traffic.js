@@ -39,7 +39,7 @@ const register = async (server, options, next) => {
         const idR = `${socket.remoteFamily}:${socket.remoteAddress}:${socket.remotePort}`
         if (   traffic[idL] === undefined
             || (typeof traffic[idL] === "object" && traffic[idL].idR !== idR)) {
-            traffic[idL] = { idR: idR, bytes: 0 }
+            traffic[idL] = { idR, bytes: 0 }
         }
         const bytes = (socket[field] || 0) - traffic[idL].bytes
         traffic[idL].bytes = (socket[field] || 0)
@@ -127,8 +127,8 @@ const register = async (server, options, next) => {
 /*  export register function, wrapped in a plugin object  */
 module.exports = {
     plugin: {
-        register: register,
-        pkg:      pkg
+        register,
+        pkg
     }
 }
 
