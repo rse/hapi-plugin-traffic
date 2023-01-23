@@ -39,7 +39,7 @@ declare module "@hapi/hapi" {
         traffic(): HapiTrafficPluginState
     }
     export interface PluginsStates {
-        websocket: HapiTrafficPluginState
+        traffic: HapiTrafficPluginState
     }
 }
 
