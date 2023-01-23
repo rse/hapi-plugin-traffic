@@ -1,6 +1,6 @@
 {
     "name":        "hapi-plugin-traffic",
-    "version":     "1.1.6",
+    "version":     "1.1.7",
     "description": "HAPI plugin for network traffic accounting",
     "keywords":    [ "hapi", "plugin", "network", "traffic", "accounting" ],
     "main":        "./hapi-plugin-traffic.js",
