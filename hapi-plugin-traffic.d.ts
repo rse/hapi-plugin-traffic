@@ -22,24 +22,33 @@
 **  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-import * as HAPI from "@hapi/hapi"
+import { Plugin, Request, ReqRef, ReqRefDefaults } from "@hapi/hapi"
+import { Podium }                                  from "@hapi/podium"
 
-interface HapiTrafficPluginState {
-    timeStart:    Date
-    timeFinish:   Date
-    timeDuration: number
-    recvPayload:  number
-    recvRaw:      number
-    sentPayload:  number
-    sentRaw:      number
+declare namespace HAPIPluginTraffic {
+    interface PluginState {
+        timeStart:    Date
+        timeFinish:   Date
+        timeDuration: number
+        recvPayload:  number
+        recvRaw:      number
+        sentPayload:  number
+        sentRaw:      number
+    }
+    interface OptionalRegistrationOptions {
+    }
 }
+
+declare const HAPIPluginTraffic: Plugin<HAPIPluginTraffic.OptionalRegistrationOptions>
+
+export = HAPIPluginTraffic
 
 declare module "@hapi/hapi" {
     export interface Request<Refs extends ReqRef = ReqRefDefaults> extends Podium {
-        traffic(): HapiTrafficPluginState
+        traffic(): HAPIPluginTraffic.PluginState
     }
     export interface PluginsStates {
-        traffic: HapiTrafficPluginState
+        traffic: HAPIPluginTraffic.PluginState
     }
 }
 
