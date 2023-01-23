@@ -22,7 +22,7 @@
 **  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// import * as HAPI from "@hapi/hapi"
+import * as HAPI from "@hapi/hapi"
 
 interface HapiTrafficPluginState {
     timeStart:    Date
