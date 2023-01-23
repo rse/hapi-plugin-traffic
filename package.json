@@ -4,6 +4,7 @@
     "description": "HAPI plugin for network traffic accounting",
     "keywords":    [ "hapi", "plugin", "network", "traffic", "accounting" ],
     "main":        "./hapi-plugin-traffic.js",
+    "types":       "./hapi-plugin-traffic.d.ts",
     "license":     "MIT",
     "repository": {
         "type": "git",
